@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Hedvig+Letters+Sans&family=Ultra&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hedvig+Letters+Sans&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Ultra&display=swap');
+
+
+.playerName {
+  color: rgb(251, 251, 251);
+  font-size: 1.5em;
+  padding: 0.5em;
+}
+
+
+.head {
+  color: rgb(255, 255, 255);
+  background-color: rgb(70, 169, 231); 
+  font-family:"Hedvig Letters Sans", serif;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+
+.form-control-1 {
+  padding: 10px 15px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #232222;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  outline: none;
+  width: 180px;
+  position: relative;
+}
+
+.form-control-2 {
+  padding: 10px 15px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  outline: none;
+  width: 180px;
+  position: relative;
+}
+
+
+.button-1 {
+  padding: 10px 15px; 
+  font-size: 16px;    
+  font-family: Arial, sans-serif; 
+  background-color: #ffffff; 
+  color: #000; 
+  border: 1px solid #ffffff; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  outline: none; 
+  margin: 10px;
+  margin-left: 41px;
+}
+
+.button-2 {
+  padding: 10px 15px; 
+  font-size: 16px;    
+  font-family: Arial, sans-serif; 
+  background-color: #ffffff; 
+  color: #000; 
+  border: 1px solid #ffffff; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  outline: none; 
+  margin: 10px;
+}
+
+
