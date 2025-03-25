@@ -80,7 +80,7 @@ function App() {
 
         <footer className='bg-dark text-dark text-muted'>
           <div className='container-fluid'>
-            <a className='text-reset' href='https://github.com/Tobywarrenhunt/StartUp-260'>
+            <a className='text-reset' href='https://github.com/Tobywarrenhunt/Start-up.git'>
               Github
             </a>
           </div>
