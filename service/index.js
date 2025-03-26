@@ -1,8 +1,24 @@
+const { MongoClient } = require('mongodb');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const uuid = require('uuid');
+const config = require('./dbConfig.json');
 const app = express();
+
+const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+const client = new MongoClient(url);
+const db = client.db('simon');
+
+(async function testConnection() {
+  try {
+    await db.command({ ping: 1 });
+    console.log('MongoDB connected successfully!');
+  } catch (ex) {
+    console.log(`Unable to connect to database with ${url} because ${ex.message}`);
+    process.exit(1);
+  }
+})();
 
 const authCookieName = 'token';
 
@@ -12,9 +28,7 @@ let scores = [];
 const port = process.argv.length > 2 ? process.argv[2] : 3000;
 
 app.use(express.json());
-
 app.use(cookieParser());
-
 app.use(express.static('public'));
 
 var apiRouter = express.Router();
@@ -62,7 +76,6 @@ const verifyAuth = async (req, res, next) => {
   }
 };
 
-
 app.use(function (err, req, res, next) {
   res.status(500).send({ type: err.name, message: err.message });
 });
@@ -70,7 +83,6 @@ app.use(function (err, req, res, next) {
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
-
 
 async function createUser(email, password) {
   const passwordHash = await bcrypt.hash(password, 10);
