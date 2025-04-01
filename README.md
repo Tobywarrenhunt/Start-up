@@ -108,13 +108,13 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ## 🚀 DB/Login deliverable
 
-For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
+For this deliverable I did the following. I checked the box [x] and added a description for things I completed.
 
-- [ ] **User registration** - I did not complete this part of the deliverable.
-- [ ] **User login and logout** - I did not complete this part of the deliverable.
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Restricts functionality based on authentication** - I did not complete this part of the deliverable.
+ User registration - it does this
+ User login and logout -it uses this
+ Stores data in MongoDB - it also stores data in MongoDB
+ Stores credentials in MongoDB - it stores credentials in mongoDN
+ Restricts functionality based on authentication - Yes it does this to
 
 ## 🚀 WebSocket deliverable
 
