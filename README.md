@@ -110,11 +110,11 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box [x] and added a description for things I completed.
 
- User registration - it does this
- User login and logout -it uses this
- Stores data in MongoDB - it also stores data in MongoDB
- Stores credentials in MongoDB - it stores credentials in mongoDN
- Restricts functionality based on authentication - Yes it does this to
+- [x] **User registration** - it does this
+- [x] **User login and logout** -it uses this
+- [x] **Stores data in MongoDB** - it also stores data in MongoDB
+- [x] **Stores credentials in MongoDB** - it stores credentials in mongoDN
+- [x] **Restricts functionality based on authentication** - Yes it does this to
 
 ## 🚀 WebSocket deliverable
 
