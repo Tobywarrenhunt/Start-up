@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './play.css';
+import { GameEvent, GameNotifier } from './game';
 
 export function Play({ userName, setScores }) {
   const initialPositions = {
@@ -25,6 +26,7 @@ export function Play({ userName, setScores }) {
   const [cutMessage, setCutMessage] = useState('');
   const [ronQuote, setRonQuote] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [peerMessages, setPeerMessages] = useState([]);
 
   const elementRefs = {
     green: useRef(null),
@@ -35,6 +37,7 @@ export function Play({ userName, setScores }) {
   };
 
   const cutRef = useRef(null);
+  const socketRef = useRef(null); 
 
   const fetchRonQuote = async () => {
     try {
@@ -52,7 +55,26 @@ export function Play({ userName, setScores }) {
   };
 
   useEffect(() => {
-    fetchRonQuote();
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    const socket = new WebSocket(`${protocol}://${window.location.hostname}:8080/ws`);
+    socketRef.current = socket;
+
+    socket.onopen = () => {
+      console.log('WebSocket connected');
+    };
+
+    socket.onmessage = (event) => {
+      const message = event.data;
+      setPeerMessages((prevMessages) => [...prevMessages, message]);
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket disconnected');
+    };
+
+    return () => {
+      socket.close();
+    };
   }, []);
 
   const handleMouseDown = (e, color) => {
@@ -108,8 +130,23 @@ export function Play({ userName, setScores }) {
           ...prevScores,
           [draggedElement]: cutMessage,
         }));
+
+        if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+          socketRef.current.send(cutMessage);
+        }
       }
     }
+  };
+
+  const handleInputChange = (e, color) => {
+    setInputValues((prev) => ({
+      ...prev,
+      [color]: e.target.value,
+    }));
+  };
+
+  const handleNewQuote = () => {
+    fetchRonQuote();
   };
 
   useEffect(() => {
@@ -123,115 +160,32 @@ export function Play({ userName, setScores }) {
     }
   }, [isDragging, cutMessage]);
 
-  const handleInputChange = (e, color) => {
-    setInputValues((prev) => ({
-      ...prev,
-      [color]: e.target.value,
-    }));
-  };
-
-  const handleNewQuote = () => {
-    fetchRonQuote();
-  };
-
   return (
     <main>
       <div className="place-2">
         {/* Draggable color elements */}
-        <div
-          ref={elementRefs.green}
-          className="c_green"
-          onMouseDown={(e) => handleMouseDown(e, 'green')}
-          style={{
-            top: `${dragPositions.green.y}px`,
-            left: `${dragPositions.green.x}px`,
-            position: 'absolute',
-          }}
-        >
-          <input
-            className="m_green"
-            type="text"
-            value={inputValues.green}
-            onChange={(e) => handleInputChange(e, 'green')}
-            placeholder="Green Message"
-          />
-        </div>
-
-        <div
-          ref={elementRefs.red}
-          className="c_red"
-          onMouseDown={(e) => handleMouseDown(e, 'red')}
-          style={{
-            top: `${dragPositions.red.y}px`,
-            left: `${dragPositions.red.x}px`,
-            position: 'absolute',
-          }}
-        >
-          <input
-            className="m_red"
-            type="text"
-            value={inputValues.red}
-            onChange={(e) => handleInputChange(e, 'red')}
-            placeholder="Red Message"
-          />
-        </div>
-
-        <div
-          ref={elementRefs.blue}
-          className="c_blue"
-          onMouseDown={(e) => handleMouseDown(e, 'blue')}
-          style={{
-            top: `${dragPositions.blue.y}px`,
-            left: `${dragPositions.blue.x}px`,
-            position: 'absolute',
-          }}
-        >
-          <input
-            className="m_blue"
-            type="text"
-            value={inputValues.blue}
-            onChange={(e) => handleInputChange(e, 'blue')}
-            placeholder="Blue Message"
-          />
-        </div>
-
-        <div
-          ref={elementRefs.purple}
-          className="c_purple"
-          onMouseDown={(e) => handleMouseDown(e, 'purple')}
-          style={{
-            top: `${dragPositions.purple.y}px`,
-            left: `${dragPositions.purple.x}px`,
-            position: 'absolute',
-          }}
-        >
-          <input
-            className="m_purple"
-            type="text"
-            value={inputValues.purple}
-            onChange={(e) => handleInputChange(e, 'purple')}
-            placeholder="Purple Message"
-          />
-        </div>
-
-        <div
-          ref={elementRefs.orange}
-          className="c_orange"
-          onMouseDown={(e) => handleMouseDown(e, 'orange')}
-          style={{
-            top: `${dragPositions.orange.y}px`,
-            left: `${dragPositions.orange.x}px`,
-            position: 'absolute',
-          }}
-        >
-          <input
-            className="m_orange"
-            type="text"
-            value={inputValues.orange}
-            onChange={(e) => handleInputChange(e, 'orange')}
-            placeholder="Orange Message"
-          />
-        </div>
+        {Object.keys(inputValues).map((color) => (
+          <div
+            key={color}
+            ref={elementRefs[color]}
+            className={`c_${color}`}
+            onMouseDown={(e) => handleMouseDown(e, color)}
+            style={{
+              top: `${dragPositions[color]?.y}px`,
+              left: `${dragPositions[color]?.x}px`,
+              position: 'absolute',
+              cursor: 'move',
+            }}
+          >
+            <input
+              className={`m_${color}`}
+              type="text"
+              value={inputValues[color]}
+              onChange={(e) => handleInputChange(e, color)}
+              placeholder={`${color} Message`}
+            />
+          </div>
+        ))}
 
         {/* Static "Cut Here" Section */}
         <div className="cutter" ref={cutRef}>
@@ -240,6 +194,22 @@ export function Play({ userName, setScores }) {
             <input type="text" value={cutMessage} placeholder="Display message" readOnly />
           </div>
         </div>
+      </div>
+
+      {/* Display peer messages on the right side */}
+      <div className="peer-messages">
+        <h1 className="peer-quotes">Peer Messages</h1>
+        {peerMessages.length > 0 ? (
+          <div>
+            {peerMessages.map((message, index) => (
+              <div key={index} className="peer-message">
+                <input type="text" value={message} readOnly />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <input type="text" />
+        )}
       </div>
 
       {/* Display Ron Swanson Quote */}
