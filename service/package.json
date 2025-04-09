@@ -12,7 +12,9 @@
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
+    "mongobd": "^0.0.1-security.0",
     "mongodb": "^6.15.0",
+    "peerjs": "^1.5.4",
     "uuid": "^11.0.5"
   }
 }

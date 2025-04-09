@@ -36,15 +36,12 @@ export function Play({ userName, setScores }) {
 
   const cutRef = useRef(null);
 
-  // Fetch Ron Swanson quote from the API
   const fetchRonQuote = async () => {
     try {
       const response = await fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes');
-
       if (!response.ok) {
         throw new Error(`Error fetching quote: ${response.statusText}`);
       }
-
       const data = await response.json();
       setRonQuote(data[0] || 'No quote available.');
     } catch (error) {
@@ -55,7 +52,7 @@ export function Play({ userName, setScores }) {
   };
 
   useEffect(() => {
-    fetchRonQuote();  // Call the API on mount to get an initial quote
+    fetchRonQuote();
   }, []);
 
   const handleMouseDown = (e, color) => {
@@ -109,7 +106,7 @@ export function Play({ userName, setScores }) {
       if (cutMessage) {
         setScores((prevScores) => ({
           ...prevScores,
-          [draggedElement]: cutMessage, // Update the message for the dragged color
+          [draggedElement]: cutMessage,
         }));
       }
     }
